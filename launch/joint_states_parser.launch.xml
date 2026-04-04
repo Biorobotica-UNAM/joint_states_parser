@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <group>
+    <push-ros-namespace namespace="joint_states_parser"/>
+    <node pkg="joint_states_parser"
+          exec="joint_states_parser_node"
+          name="joint_states_parser_node"
+          output="screen"/>
+  </group>
+
+</launch>
