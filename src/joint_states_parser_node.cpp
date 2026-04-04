@@ -15,21 +15,23 @@ public:
         RCLCPP_INFO(this->get_logger(), "Initializing joint_states_parser_node...");
 
         canonical_joints_ = {
-            // Torso
-            "torso_joint",
-            // Right arm
-            "rf_shoulder_joint", "rs_shoulder_joint", "r_arm_twist_joint",
-            "r_elbow_joint", "r_wrist_joint", "r_hand_joint",
-            "right_griper_L_joint", "right_griper_R_joint",
-            // Left arm
-            "lf_shoulder_joint", "ls_shoulder_joint", "l_arm_twist_joint",
-            "l_elbow_joint", "l_wrist_joint", "l_hand_joint",
-            "left_griper_L_joint", "left_griper_R_joint",
-            // Head
-            "head_pan_joint", "head_tilt_joint",
-            // Base
-            "wheel0_joint", "wheel1_joint", "wheel2_joint",
-        };
+			// Virtual joint
+			"virtual_joint",
+			// Torso
+			"torso_joint",
+			// Right arm
+			"rf_shoulder_joint", "rs_shoulder_joint", "r_arm_twist_joint",
+			"r_elbow_joint", "r_wrist_joint", "r_hand_joint",
+			"right_griper_L_joint", "right_griper_R_joint",
+			// Left arm
+			"lf_shoulder_joint", "ls_shoulder_joint", "l_arm_twist_joint",
+			"l_elbow_joint", "l_wrist_joint", "l_hand_joint",
+			"left_griper_L_joint", "left_griper_R_joint",
+			// Head
+			"head_pan_joint", "head_tilt_joint",
+			// Base wheels
+			"wheel0_joint", "wheel1_joint", "wheel2_joint",
+		};
 
         for (const auto& name : canonical_joints_)
             joint_positions_[name] = 0.0;
@@ -110,24 +112,25 @@ private:
     }
 
     void publish_callback()
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
+	{
+		std::lock_guard<std::mutex> lock(mutex_);
 
-        if (!all_received_)
-            return;
+		sensor_msgs::msg::JointState msg;
+		msg.header.stamp = this->now();
+		msg.header.frame_id = "";
 
-        sensor_msgs::msg::JointState msg;
-        msg.header.stamp = this->now();
-        msg.header.frame_id = "";
+		for (const auto& name : canonical_joints_)
+		{
+		    msg.name.push_back(name);
 
-        for (const auto& name : canonical_joints_)
-        {
-            msg.name.push_back(name);
-            msg.position.push_back(joint_positions_.at(name));
-        }
+		    if (received_.count(name) && received_[name])
+		        msg.position.push_back(joint_positions_.at(name));
+		    else
+		        msg.position.push_back(0.0);
+		}
 
-        pub_->publish(msg);
-    }
+		pub_->publish(msg);
+	}
 };
 
 int main(int argc, char** argv)
