@@ -43,6 +43,7 @@ public:
             "lf_shoulder_joint", "ls_shoulder_joint", "l_arm_twist_joint",
             "l_elbow_joint", "l_wrist_joint", "l_hand_joint",
 			"head_pan_joint", "head_tilt_joint",
+			"wheel0_joint", "wheel1_joint", "wheel2_joint",
         };
 
         for (const auto& name : expected_joints_)
@@ -58,7 +59,7 @@ public:
             "/manipulation/joint_states", 10);
 
         timer_ = this->create_wall_timer(
-            20ms, std::bind(&JointStatesParserNode::publish_callback, this));
+            100ms, std::bind(&JointStatesParserNode::publish_callback, this));
 
         RCLCPP_INFO(this->get_logger(), "Joint states parser ready");
     }
