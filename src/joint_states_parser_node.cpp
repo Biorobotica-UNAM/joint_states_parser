@@ -40,9 +40,11 @@ public:
             "torso_joint",
             "rf_shoulder_joint", "rs_shoulder_joint", "r_arm_twist_joint",
             "r_elbow_joint", "r_wrist_joint", "r_hand_joint",
+            "right_gripper_L_joint", "right_gripper_R_joint",
             "lf_shoulder_joint", "ls_shoulder_joint", "l_arm_twist_joint",
             "l_elbow_joint", "l_wrist_joint", "l_hand_joint",
-			"head_pan_joint", "head_tilt_joint",
+			"left_gripper_L_joint", "left_gripper_R_joint",
+            "head_pan_joint", "head_tilt_joint",
 			"wheel0_joint", "wheel1_joint", "wheel2_joint",
         };
 
