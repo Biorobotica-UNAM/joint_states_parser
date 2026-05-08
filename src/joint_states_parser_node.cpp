@@ -16,7 +16,7 @@ public:
 
         canonical_joints_ = {
 			// Virtual joint
-			"virtual_joint",
+			"virtual_joint/x", "virtual_joint/y", "virtual_joint/theta",
 			// Torso
 			"torso_joint",
 			// Right arm
@@ -37,7 +37,7 @@ public:
             joint_positions_[name] = 0.0;
 
         expected_joints_ = {
-			"virtual_joint",
+			"virtual_joint/x", "virtual_joint/y", "virtual_joint/theta",
             "torso_joint",
             "rf_shoulder_joint", "rs_shoulder_joint", "r_arm_twist_joint",
             "r_elbow_joint", "r_wrist_joint", "r_hand_joint",
@@ -128,9 +128,20 @@ private:
 		    msg.name.push_back(name);
 
 		    if (received_.count(name) && received_[name])
+		    {
 		        msg.position.push_back(joint_positions_.at(name));
+		    }
 		    else
+		    {
+		        RCLCPP_WARN_THROTTLE(
+		            this->get_logger(),
+		            *this->get_clock(),
+		            5000,
+		            "Joint '%s' never received",
+		            name.c_str());
+
 		        msg.position.push_back(0.0);
+		    }
 		}
 
 		pub_->publish(msg);
