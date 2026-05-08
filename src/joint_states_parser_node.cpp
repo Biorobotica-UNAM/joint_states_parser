@@ -15,8 +15,6 @@ public:
         RCLCPP_INFO(this->get_logger(), "Initializing joint_states_parser_node...");
 
         canonical_joints_ = {
-			// Virtual joint
-			"virtual_joint/x", "virtual_joint/y", "virtual_joint/theta",
 			// Torso
 			"torso_joint",
 			// Right arm
@@ -37,7 +35,6 @@ public:
             joint_positions_[name] = 0.0;
 
         expected_joints_ = {
-			"virtual_joint/x", "virtual_joint/y", "virtual_joint/theta",
             "torso_joint",
             "rf_shoulder_joint", "rs_shoulder_joint", "r_arm_twist_joint",
             "r_elbow_joint", "r_wrist_joint", "r_hand_joint",
